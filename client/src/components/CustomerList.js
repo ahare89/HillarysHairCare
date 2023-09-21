@@ -11,6 +11,10 @@ export const CustomerList = () => {
         getCustomers().then(setCustomers)
     },[])
 
+    const handleCustomerAdd = (newCustomer) => {
+        setCustomers(prevCustomers => [...prevCustomers, newCustomer]);
+    }
+
     return (
         <div className="container">
             <div className="sub-menu bg-light">
@@ -32,7 +36,7 @@ export const CustomerList = () => {
                         )}
                     </tbody>
                 </Table>
-                <AddCustomer/>
+                <AddCustomer handleCustomerAdd = {handleCustomerAdd}/>
             
         </div>
     )
