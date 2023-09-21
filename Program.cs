@@ -45,6 +45,10 @@ app.MapGet("/api/appointments", (HillarysHairCareDbContext db) => {
     .Include(a => a.Stylist);
 });
 
+app.MapGet("/api/stylists", (HillarysHairCareDbContext db) => {
+    return db.Stylists;
+});
+
 app.UseAuthorization();
 
 app.MapControllers();
