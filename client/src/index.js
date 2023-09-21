@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { CustomerList } from './components/CustomerList';
+import { AppointmentList } from './components/AppointmentsList';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -12,8 +13,9 @@ root.render(
   <Routes>
     <Route path="/" element={<App/>}>
       <Route path="customers" element={<CustomerList/>}></Route>
-        <Route index element={<h2>hello</h2>}>
+        <Route index element={<AppointmentList/>}>
         </Route>
+        <Route path="appointments" element={<AppointmentList/>}></Route>
     </Route>
   </Routes>
     </BrowserRouter>
