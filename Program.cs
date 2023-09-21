@@ -49,6 +49,38 @@ app.MapGet("/api/stylists", (HillarysHairCareDbContext db) => {
     return db.Stylists;
 });
 
+app.MapPost("/api/customers", (HillarysHairCareDbContext db, Customer newCustomer) => {
+    try {
+        db.Customers.Add(newCustomer);
+        db.SaveChanges();
+        return Results.Created($"/api/customers/{newCustomer.Id}", newCustomer);
+    } 
+    catch (DbUpdateException) {
+        return Results.BadRequest("Invalid Data Submitted");
+    }
+});
+
+app.MapPost("/api/stylists", (HillarysHairCareDbContext db, Stylist newStylist) => {
+
+try {
+    newStylist.isEmployed = true;
+    db.Stylists.Add(newStylist);
+    db.SaveChanges();
+    return Results.Created($"/api/stylists/{newStylist.Id}", newStylist);
+}
+catch (DbUpdateException) {
+    return Results.BadRequest("Invalid Data Submitted");
+}
+});
+
+app.MapDelete("api/stylists/{id}", (HillarysHairCareDbContext db, int id) => {
+    Stylist stylistToDeactivate = db.Stylists.SingleOrDefault(s => s.Id == id);
+
+    stylistToDeactivate.isEmployed = false;
+    db.SaveChanges();
+    return Results.Ok(stylistToDeactivate);
+});
+
 app.UseAuthorization();
 
 app.MapControllers();

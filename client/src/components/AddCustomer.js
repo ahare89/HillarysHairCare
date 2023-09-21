@@ -55,7 +55,7 @@ export const AddCustomer = ({ handleCustomerAdd }) => {
               >
                 Cancel
               </button>
-              <button type="submit" className="btn btn-success" type="submit">
+              <button type="submit" className="btn btn-success">
                 Submit
               </button>
             </div>
