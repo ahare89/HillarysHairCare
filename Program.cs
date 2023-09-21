@@ -39,6 +39,12 @@ app.MapGet("/api/customers", (HillarysHairCareDbContext db) => {
     return db.Customers;
 });
 
+app.MapGet("/api/appointments", (HillarysHairCareDbContext db) => {
+    return db.Appointments
+    .Include(a => a.Customer)
+    .Include(a => a.Stylist);
+});
+
 app.UseAuthorization();
 
 app.MapControllers();
