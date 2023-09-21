@@ -2,8 +2,18 @@ import { useEffect, useState } from "react"
 import { Table } from "reactstrap";
 import { getStylists } from "../data/stylistData";
 import { AddStylist } from "./AddStylist";
+import { DeactivateStylist } from "./DeactivateStylist";
 
 export const StylistList = () => {
+
+    // need function that will update StylistList after deactivating a stylist
+
+    const handleStylistDeactivate = (deactivatedStylistId) => {
+        //set stylists to previous state of stylists, then
+        //on the stylist that matches the updatedStylist.Id,
+        //change isEmployed to false, otherwise leave them alone
+        setStylists(prevStylists => prevStylists.map(s => s.id === deactivatedStylistId ? {...s, isEmployed: false} : s))
+    }
 
     const [stylists, setStylists] = useState([]);
 
@@ -33,6 +43,7 @@ export const StylistList = () => {
                         <td>{s.id}</td>
                         <td>{s.name}</td>
                         <td>{s.isEmployed ? "Active" : "Not Active"}</td>
+                        <DeactivateStylist onDeactivate={handleStylistDeactivate} stylist = {s} stylistId = {s.id} />
                     </tr>)}
                 </tbody>
             </Table>
