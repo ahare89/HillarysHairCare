@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react"
 import { Table } from "reactstrap";
 import { getStylists } from "../data/stylistData";
+import { AddStylist } from "./AddStylist";
 
 export const StylistList = () => {
 
     const [stylists, setStylists] = useState([]);
+
+    const handleStylistAdd = (newStylist) => {
+        setStylists(prevStylists => [...prevStylists, newStylist])
+    }
 
     useEffect(() => {
         getStylists().then(setStylists);
@@ -31,6 +36,7 @@ export const StylistList = () => {
                     </tr>)}
                 </tbody>
             </Table>
+                    <AddStylist handleStylistAdd={handleStylistAdd}/>
         </div>
     )
 
