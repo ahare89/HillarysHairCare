@@ -35,6 +35,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.MapGet("/api/customers", (HillarysHairCareDbContext db) => {
+    return db.Customers;
+});
+
 app.UseAuthorization();
 
 app.MapControllers();
