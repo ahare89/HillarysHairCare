@@ -21,6 +21,21 @@ namespace HillarysHairCare.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("AppointmentService", b =>
+                {
+                    b.Property<int>("AppointmentsId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ServicesId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("AppointmentsId", "ServicesId");
+
+                    b.HasIndex("ServicesId");
+
+                    b.ToTable("AppointmentService");
+                });
+
             modelBuilder.Entity("HillarysHairCare.Models.Appointment", b =>
                 {
                     b.Property<int>("Id")
@@ -39,6 +54,10 @@ namespace HillarysHairCare.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("StylistId");
 
                     b.ToTable("Appointments");
 
@@ -67,6 +86,10 @@ namespace HillarysHairCare.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppointmentId");
+
+                    b.HasIndex("ServiceId");
 
                     b.ToTable("AppointmentsServices");
 
@@ -261,6 +284,59 @@ namespace HillarysHairCare.Migrations
                             Name = "Pippa Vanderschnout",
                             isEmployed = true
                         });
+                });
+
+            modelBuilder.Entity("AppointmentService", b =>
+                {
+                    b.HasOne("HillarysHairCare.Models.Appointment", null)
+                        .WithMany()
+                        .HasForeignKey("AppointmentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HillarysHairCare.Models.Service", null)
+                        .WithMany()
+                        .HasForeignKey("ServicesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HillarysHairCare.Models.Appointment", b =>
+                {
+                    b.HasOne("HillarysHairCare.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HillarysHairCare.Models.Stylist", "Stylist")
+                        .WithMany()
+                        .HasForeignKey("StylistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Stylist");
+                });
+
+            modelBuilder.Entity("HillarysHairCare.Models.AppointmentService", b =>
+                {
+                    b.HasOne("HillarysHairCare.Models.Appointment", "Appointment")
+                        .WithMany()
+                        .HasForeignKey("AppointmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HillarysHairCare.Models.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Appointment");
+
+                    b.Navigation("Service");
                 });
 #pragma warning restore 612, 618
         }

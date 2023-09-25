@@ -43,8 +43,8 @@ export const StylistList = () => {
                         <td>{s.id}</td>
                         <td>{s.name}</td>
                         <td>{s.isEmployed ? "Active" : "Not Active"}</td>
-                        <DeactivateStylist onDeactivate={handleStylistDeactivate} stylist = {s} stylistId = {s.id} />
-                    </tr>)}
+                        <td><DeactivateStylist onDeactivate={handleStylistDeactivate} stylist = {s} stylistId = {s.id} />
+                        </td></tr>)}
                 </tbody>
             </Table>
                     <AddStylist handleStylistAdd={handleStylistAdd}/>

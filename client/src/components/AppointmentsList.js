@@ -1,14 +1,30 @@
 import { useEffect, useState } from "react"
 import { getAppointments } from "../data/appointmentData"
 import { Table } from "reactstrap"
+import { AddAppointment } from "./AddAppointment"
 
 export const AppointmentList = () => {
 
     const [appointments, setAppointments] = useState([])
+    const [addAppointmentButton, setAddAppointmentButton] = useState(false)
 
     useEffect(() => {
         getAppointments().then(setAppointments)
     },[])
+
+    const addAppointmentButtonHandler = (e) => {
+        e.preventDefault();
+        setAddAppointmentButton(true)
+    }
+
+    const cancelButtonHandler = (e) => {
+        e.preventDefault();
+        setAddAppointmentButton(false)
+    }
+
+    const handleAppointmentAdd = (newAppointment) => {
+        setAppointments(prevAppointments => [...prevAppointments, newAppointment])
+    }
 
     return (
         <div className="container">
@@ -22,6 +38,7 @@ export const AppointmentList = () => {
                         <th>Customer Name</th>
                         <th>Stylist Name</th>
                         <th>Date</th>
+                        <th>Services</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,11 +47,20 @@ export const AppointmentList = () => {
                 <th>{a.customer.name}</th>
                 <th>{a.stylist.name}</th>
                 <th>{a.date}</th>
+                <th>{a.services.map(service => service.name).join(', ')}</th>
                 </tr>
                 )}
                 </tbody>
             </Table>
-        
+            {addAppointmentButton ? (
+  <>
+     <AddAppointment handleAppointmentAdd = {handleAppointmentAdd}/>
+     <button onClick={cancelButtonHandler} className="btn btn-danger">Cancel</button>
+  </> 
+) : (
+  <button onClick={addAppointmentButtonHandler} className="btn btn-primary">Add Appointment</button>
+)}
+
         </div>
     )
 }

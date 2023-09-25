@@ -7,4 +7,6 @@ public class Service {
     [Required]
     public string Name { get; set; }
     public decimal Price { get; set; }
+    public List<Appointment> Appointments { get; set; }
+
 }
