@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { getAppointments } from "../data/appointmentData"
 import { Table } from "reactstrap"
 import { AddAppointment } from "./AddAppointment"
+import { DeleteAppointment } from "./DeleteAppointment"
 
 export const AppointmentList = () => {
 
@@ -26,6 +27,10 @@ export const AppointmentList = () => {
         setAppointments(prevAppointments => [...prevAppointments, newAppointment])
     }
 
+    const handleAppointmentDelete = (deletedAppointmentId) => {
+        setAppointments(prevAppointments => prevAppointments.filter(appointment => appointment.id !== deletedAppointmentId))    
+    }
+
     return (
         <div className="container">
             <div className="sub-menu bg-light">
@@ -48,6 +53,7 @@ export const AppointmentList = () => {
                 <th>{a.stylist.name}</th>
                 <th>{a.date}</th>
                 <th>{a.services.map(service => service.name).join(', ')}</th>
+                <th><DeleteAppointment onDelete = {handleAppointmentDelete} appointmentId = {a.id}/></th>
                 </tr>
                 )}
                 </tbody>

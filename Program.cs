@@ -108,6 +108,20 @@ return Results.Created($"/api/appointments/{newAppointment.Id}", newAppointment)
 
 });
 
+app.MapDelete("/api/appointments/{id}", (HillarysHairCareDbContext db, int id) => {
+
+Appointment appointmentToDelete = db.Appointments.SingleOrDefault(a => a.Id == id);
+if (appointmentToDelete == null)
+{
+    return Results.NotFound();
+}
+
+db.Appointments.Remove(appointmentToDelete);
+db.SaveChanges();
+return Results.NoContent();
+
+});
+
 app.UseAuthorization();
 
 app.MapControllers();
