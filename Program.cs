@@ -42,11 +42,16 @@ app.MapGet("/api/customers", (HillarysHairCareDbContext db) => {
 app.MapGet("/api/appointments", (HillarysHairCareDbContext db) => {
     return db.Appointments
     .Include(a => a.Customer)
-    .Include(a => a.Stylist);
+    .Include(a => a.Stylist)
+    .Include(a => a.Services);
 });
 
 app.MapGet("/api/stylists", (HillarysHairCareDbContext db) => {
     return db.Stylists;
+});
+
+app.MapGet("/api/services", (HillarysHairCareDbContext db) => {
+    return db.Services;
 });
 
 app.MapPost("/api/customers", (HillarysHairCareDbContext db, Customer newCustomer) => {
@@ -79,6 +84,28 @@ app.MapDelete("api/stylists/{id}", (HillarysHairCareDbContext db, int id) => {
     stylistToDeactivate.isEmployed = false;
     db.SaveChanges();
     return Results.Ok(stylistToDeactivate);
+});
+
+app.MapDelete("/api/customers/{id}", (HillarysHairCareDbContext db, int id) => {
+    Customer customerToDelete = db.Customers.SingleOrDefault(c => c.Id == id);
+    db.Customers.Remove(customerToDelete);
+    db.SaveChanges();
+    return Results.Ok(customerToDelete);
+});
+
+app.MapPost("/api/appointments", (HillarysHairCareDbContext db, Appointment newAppointment) => {
+
+List<int> serviceIds = newAppointment.Services.Select(s => s.Id).ToList();
+List<Service> foundServices = db.Services.Where(s => serviceIds.Contains(s.Id)).ToList();
+Customer matchedCustomer = db.Customers.SingleOrDefault(c => c.Id == newAppointment.CustomerId);
+Stylist matchedStylist = db.Stylists.SingleOrDefault(s => s.Id == newAppointment.StylistId);
+newAppointment.Services = foundServices;
+newAppointment.Customer = matchedCustomer;
+newAppointment.Stylist = matchedStylist;
+db.Appointments.Add(newAppointment);
+db.SaveChanges();
+return Results.Created($"/api/appointments/{newAppointment.Id}", newAppointment);
+
 });
 
 app.UseAuthorization();
